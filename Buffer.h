@@ -71,7 +71,7 @@ public:
 		os << '{';
 		for (size_t i = 0; i < queue._size; ++i) {
 			os << queue[i];
-			if (i != queue._size - 1) {
+			if (i < queue._size - 1) {
 				os << ", ";
 			}
 		}
@@ -95,5 +95,35 @@ private:
 };
 
 using Buffer = Queue<Packet>;
+
+/*
+ * for each packet {
+ *   currentTime = packet.arrivalTime
+ *   for each packet in buffer {
+ *     responseTime = packet.arrivalTime + packet.processDuration
+ *     if responseTime > currentTime {
+ *       remove that packet and add to response
+ *     }
+ *   }
+ *
+ *   push packet to buffer
+ *   if buffer size didn't change {
+ *     add dropped response
+ *   }
+ * }
+ * for each packet in buffer {
+ *   responseTime = packet.arrivalTime + packet.processDuration
+ *   add to response
+ * }
+ * sort responses by arrivalTime
+ */
+
+std::vector<Response> processPackets(const std::vector<Packet>& packets, Buffer *pBuffer) {
+	time::time time = 0;
+	for (const Packet& packet : packets) {
+//		packet.arrivalTime
+	}
+	return {};
+}
 
 #endif //ASSIGNMENT_3__BUFFER_H_

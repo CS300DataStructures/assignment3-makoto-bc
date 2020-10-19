@@ -8,7 +8,7 @@ set(
     Packet.h
     Buffer.cpp
     Response.h
-)
+    time.h)
 
 add_subdirectory(tests)
 

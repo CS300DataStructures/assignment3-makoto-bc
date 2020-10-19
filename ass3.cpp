@@ -27,10 +27,6 @@ std::vector<Packet> readPackets() {
 	return result;
 }
 
-std::vector<Response> processPackets(const std::vector<Packet>& requests, Buffer *pBuffer) {
-	return {};
-}
-
 void printResponses(const std::vector<Response>& responses) {
 
 }
