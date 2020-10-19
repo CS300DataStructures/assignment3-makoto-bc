@@ -8,7 +8,15 @@ namespace network {
 
 class Packet {
 public:
-	Packet(size_t id, time arrivalTime, network::duration processingDuration)
+	/**
+	 * For zero initialization; don't use directly.
+	 */
+	Packet()
+		: _id(0)
+		  , _arrivalTime(0)
+		  , _processingDuration(0) {}
+
+	Packet(size_t id, time arrivalTime, duration processingDuration)
 		: _id(id)
 		  , _arrivalTime(arrivalTime)
 		  , _processingDuration(processingDuration) {}
@@ -24,11 +32,12 @@ public:
 		return _arrivalTime;
 	}
 
-	network::duration processingDuration() const {
+	duration processingDuration() const {
 		return _processingDuration;
 	}
 
 	Packet& operator=(Packet&& packet) noexcept {
+		_id = packet._id;
 		_arrivalTime = packet._arrivalTime;
 		_processingDuration = packet._processingDuration;
 		return *this;
@@ -36,8 +45,8 @@ public:
 
 private:
 	size_t _id;
-	network::time _arrivalTime;
-	network::duration _processingDuration;
+	time _arrivalTime;
+	duration _processingDuration;
 };
 
 }

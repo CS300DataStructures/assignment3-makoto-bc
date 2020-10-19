@@ -2,29 +2,53 @@
 #define ASSIGNMENT_3__RESPONSE_H_
 
 #include <variant>
+#include <ostream>
 #include "time.h"
 
 namespace network {
 
-struct Dropped {};
-
 class Response {
 public:
-	static Response newDropped(network::time arrivalTime) {
-		return Response(arrivalTime, Dropped{});
+	struct Dropped {
+		bool operator==(const Dropped& rhs) const {
+			return true;
+		}
+	};
+
+	static Response newDropped() {
+		return Response(Dropped{});
 	}
 
-	static Response newCompletedResponse(network::time arrivalTime, network::time responseTime) {
-		return Response(arrivalTime, responseTime);
+	static Response newCompletedResponse(time processTime) {
+		return Response(processTime);
+	}
+
+	bool dropped() const {
+		return std::holds_alternative<Dropped>(_processTime);
+	}
+
+	time processTime() const {
+		return std::get<time>(_processTime);
+	}
+
+	bool operator==(const Response& rhs) const {
+		return std::tie(_processTime, _processTime) == std::tie(rhs._processTime, rhs._processTime);
+	}
+
+	friend std::ostream& operator<<(std::ostream& os, const Response& response) {
+		if (response.dropped()) {
+			os << "dropped";
+		} else {
+			os << response.processTime();
+		}
+		return os;
 	}
 
 private:
-	Response(network::time arrivalTime, std::variant<network::time, Dropped> responseTime)
-		: _arrivalTime(arrivalTime)
-		  , _responseTime(responseTime) {}
+	Response(std::variant<time, Dropped> processTime)
+		: _processTime(processTime) {}
 
-	network::time _arrivalTime;
-	std::variant<network::time, Dropped> _responseTime;
+	std::variant<time, Dropped> _processTime;
 };
 
 }

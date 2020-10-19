@@ -17,7 +17,7 @@ public:
 	};
 
 	explicit Queue(int capacity)
-		: _array(std::unique_ptr<T[]>(new T[0]{}))
+		: _array(std::make_unique<T[]>(capacity))
 		  , _capacity(capacity)
 		  , _front(0)
 		  , _size(0) {}

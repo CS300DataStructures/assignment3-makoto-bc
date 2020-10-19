@@ -125,3 +125,176 @@ TEST(Buffer, getter) {
 		EXPECT_THROW(queue[2], std::out_of_range);
 	}
 }
+
+TEST(Buffer, processPackets) {
+	struct Test {
+		std::vector<Packet> packets;
+		size_t bufferSize;
+		std::vector<Response> expected;
+	};
+
+	std::vector<Test> tests {
+		{ // 0
+			{},
+			0,
+			{},
+		},
+		{ // 1
+			{},
+			1,
+			{},
+		},
+		{ // 2
+			{
+				{0, 0, 0},
+			},
+			0,
+			{
+				Response::newDropped(),
+			},
+		},
+		{ // 3
+			{
+				{0, 1, 0},
+			},
+			0,
+			{
+				Response::newDropped(),
+			},
+		},
+		{ // 4
+			{
+				{0, 0, 0},
+			},
+			1,
+			{
+				Response::newCompletedResponse(0),
+			},
+		},
+		{ // 5
+			{
+				{0, 0, 0},
+				{1, 1, 0},
+			},
+			0,
+			{
+				Response::newDropped(),
+				Response::newDropped(),
+			},
+		},
+		{ // 6
+			{
+				{0, 0, 0},
+				{1, 1, 0},
+			},
+			1,
+			{
+				Response::newCompletedResponse(0),
+				Response::newCompletedResponse(1),
+			},
+		},
+		{ // 7
+			{
+				{0, 0, 1},
+				{1, 1, 1},
+			},
+			1,
+			{
+				Response::newCompletedResponse(0),
+				Response::newCompletedResponse(1),
+			},
+		},
+		{ // 8
+			{
+				{0, 0, 2},
+				{1, 1, 0},
+			},
+			1,
+			{
+				Response::newCompletedResponse(0),
+				Response::newDropped(),
+			},
+		},
+		{ // 9
+			{
+				{0, 0, 2},
+				{1, 1, 0},
+			},
+			2,
+			{
+				Response::newCompletedResponse(0),
+				Response::newCompletedResponse(2),
+			},
+		},
+		{ // 10
+			{
+				{0, 0, 2},
+				{1, 1, 0},
+				{1, 2, 1},
+			},
+			1,
+			{
+				Response::newCompletedResponse(0),
+				Response::newDropped(),
+				Response::newCompletedResponse(2),
+			},
+		},
+		{ // 11
+			{
+				{0, 0, 2},
+				{1, 1, 0},
+				{1, 1, 1},
+			},
+			1,
+			{
+				Response::newCompletedResponse(0),
+				Response::newDropped(),
+				Response::newDropped(),
+			},
+		},
+		{ // 12
+			{
+				{0, 0, 2},
+				{1, 1, 0},
+				{1, 1, 1},
+			},
+			2,
+			{
+				Response::newCompletedResponse(0),
+				Response::newCompletedResponse(2),
+				Response::newDropped(),
+			},
+		},
+		{ // 13
+			{
+				{0, 0, 4},
+				{1, 1, 1},
+				{1, 2, 2},
+			},
+			3,
+			{
+				Response::newCompletedResponse(0),
+				Response::newCompletedResponse(4),
+				Response::newCompletedResponse(5),
+			},
+		},
+		{ // 14
+			{
+				{0, 0, 1},
+				{1, 1, 2},
+				{1, 1, 1},
+			},
+			2,
+			{
+				Response::newCompletedResponse(0),
+				Response::newCompletedResponse(1),
+				Response::newCompletedResponse(3),
+			},
+		},
+	};
+
+	for (size_t i = 0; i < tests.size(); ++i) {
+		Buffer buffer(tests[i].bufferSize);
+		EXPECT_EQ(processPackets(tests[i].packets, &buffer), tests[i].expected) << i;
+	}
+}

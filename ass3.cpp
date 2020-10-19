@@ -4,8 +4,6 @@
 #include "Response.h"
 #include "Buffer.h"
 
-using namespace std;
-
 namespace network {
 
 std::vector<Packet> readPackets() {
@@ -34,6 +32,7 @@ void printResponses(const std::vector<Response>& responses) {
 
 }
 
+using namespace std;
 using namespace network;
 
 //please don't modify main function
