@@ -4,7 +4,7 @@
 #include <variant>
 #include <ostream>
 #include <tuple>
-#include "time.h"
+#include "time.h" // NOLINT(modernize-deprecated-headers)
 
 namespace network {
 
@@ -54,7 +54,7 @@ public:
 	}
 
 private:
-	Response(std::variant<time, Dropped> processTime)
+	explicit Response(std::variant<time, Dropped> processTime)
 		: _processTime(processTime) {}
 
 	std::variant<time, Dropped> _processTime;

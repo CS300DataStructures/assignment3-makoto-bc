@@ -17,20 +17,26 @@ public:
 	};
 
 	explicit Queue(int capacity)
+		: _array(std::make_unique<T[]>(static_cast<size_t>(capacity)))
+		  , _capacity(static_cast<size_t>(capacity))
+		  , _front(0)
+		  , _size(0) {}
+
+	explicit Queue(size_t capacity)
 		: _array(std::make_unique<T[]>(capacity))
 		  , _capacity(capacity)
 		  , _front(0)
 		  , _size(0) {}
 
-	Queue(const std::initializer_list<T>& list)
+	Queue(const std::initializer_list<T>& list) // NOLINT(cppcoreguidelines-pro-type-member-init)
 		: Queue(list.size()) {
 		for (T item : list) {
 			pushBack(item);
 		}
 	}
 
-	Queue(const Queue<T>& queue)
-		: Queue(queue.size()) {
+	Queue(const Queue<T>& queue) // NOLINT(cppcoreguidelines-pro-type-member-init)
+		: Queue(queue._capacity) {
 		for (size_t i = 0; i < queue._size; ++i) {
 			pushBack(queue[i]);
 		}
@@ -117,7 +123,7 @@ public:
 
 private:
 	std::unique_ptr<T[]> _array;
-	const size_t _capacity;
+	size_t _capacity;
 	size_t _front;
 	size_t _size;
 };

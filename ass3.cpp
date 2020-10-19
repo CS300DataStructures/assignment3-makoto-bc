@@ -53,11 +53,11 @@ int main() {
 	//create buffer with the given size
 	Buffer buffer(bufferSize);
 
-    //process the packets
-    vector<Response> responses = processPackets(requests, &buffer);
+	//process the packets
+	vector<Response> responses = processPackets(requests, &buffer);
 
-    //print responses
-    printResponses(responses);
+	//print responses
+	printResponses(responses);
 
 	return 0;
 }

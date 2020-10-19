@@ -42,8 +42,7 @@ std::vector<Response> processPackets(const std::vector<Packet>& packets, Buffer*
 		}
 
 		if (pBuffer->pushBack(packets[packetIndex]) == Buffer::PushBackResult::Dropped) {
-			auto response = Response::newDropped();
-			responses.push_back(ResponseEntry{packetIndex, response});
+			responses.push_back(ResponseEntry{packetIndex, Response::newDropped()});
 		}
 	}
 
