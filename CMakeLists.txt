@@ -10,7 +10,7 @@ set(
     Response.h
 )
 
-#add_subdirectory(tests)
+add_subdirectory(tests)
 
 add_executable(assignment-3 ass3.cpp ${SOURCES})
 

@@ -41,9 +41,9 @@ int main() {
     cin >> bufferSize;
     vector<Packet> requests = readPackets(); //read packets from user
 
-//    //create buffer with the given size
-//    Buffer buffer(bufferSize);
-//
+    //create buffer with the given size
+    Buffer buffer(bufferSize);
+
 //    //process the packets
 //    vector<Response> responses = processPackets(requests, &buffer);
 //
