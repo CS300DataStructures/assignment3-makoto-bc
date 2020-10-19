@@ -1,6 +1,8 @@
 #include <gtest/gtest.h>
 #include "../Buffer.h"
 
+using namespace network;
+
 TEST(Buffer, pushBack) {
 	{
 		Queue<int> queue(0);
@@ -58,6 +60,54 @@ TEST(Buffer, popFront) {
 		queue.popFront();
 		EXPECT_EQ(queue, Queue<int>({}));
 	}
+}
+
+TEST(Buffer, remove) {
+	struct Test {
+		Queue<int> queue;
+		size_t removeIndex;
+		Queue<int> expected;
+	};
+
+	std::vector<Test> tests {
+		{
+			{0},
+			0,
+			{},
+		},
+		{
+			{0, 1},
+			0,
+			{1},
+		},
+		{
+			{0, 1},
+			1,
+			{0},
+		},
+		{
+			{0, 1, 2},
+			0,
+			{1, 2},
+		},
+		{
+			{0, 1, 2},
+			1,
+			{0, 2},
+		},
+		{
+			{0, 1, 2},
+			2,
+			{0, 1},
+		},
+	};
+
+	for (size_t i = 0; i < tests.size(); ++i) {
+		tests[i].queue.remove(tests[i].removeIndex);
+		EXPECT_EQ(tests[i].queue, tests[i].expected) << i;
+	}
+
+	EXPECT_THROW(Queue<int>({}).remove(0), std::out_of_range);
 }
 
 TEST(Buffer, getter) {

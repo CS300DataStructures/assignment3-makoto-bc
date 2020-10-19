@@ -1,4 +1,3 @@
-//Starter Code:
 #include <iostream>
 #include <vector>
 #include "Packet.h"
@@ -6,6 +5,8 @@
 #include "Buffer.h"
 
 using namespace std;
+
+namespace network {
 
 std::vector<Packet> readPackets() {
 	size_t lineCount;
@@ -22,7 +23,7 @@ std::vector<Packet> readPackets() {
 
 		auto arivalTime = std::stoull(line.substr(0, spaceIndex));
 		auto processingDuration = std::stoull(line.substr(spaceIndex + 1));
-		result.push_back(Packet{arivalTime, processingDuration});
+		result.emplace_back(i, arivalTime, processingDuration);
 	}
 	return result;
 }
@@ -31,20 +32,24 @@ void printResponses(const std::vector<Response>& responses) {
 
 }
 
+}
+
+using namespace network;
+
 //please don't modify main function
 int main() {
-    int bufferSize;
-    cin >> bufferSize;
-    vector<Packet> requests = readPackets(); //read packets from user
+	int bufferSize;
+	cin >> bufferSize;
+	vector<Packet> requests = readPackets(); //read packets from user
 
-    //create buffer with the given size
-    Buffer buffer(bufferSize);
+	//create buffer with the given size
+	Buffer buffer(bufferSize);
 
-//    //process the packets
-//    vector<Response> responses = processPackets(requests, &buffer);
-//
+    //process the packets
+    vector<Response> responses = processPackets(requests, &buffer);
+
 //    //print responses
 //    printResponses(responses);
 
-    return 0;
+	return 0;
 }

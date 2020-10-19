@@ -3,35 +3,46 @@
 
 #include <memory>
 #include <ostream>
+#include <vector>
 #include "Packet.h"
+
+namespace network {
 
 template<class T>
 class Queue {
 public:
-	explicit Queue(int capacity)
-		: _array(std::make_unique<T[]>(0))
-		, _capacity(capacity)
-		, _front(0)
-		, _size(0) {}
+	enum class PushBackResult {
+		Added,
+		Dropped,
+	};
 
-	Queue(const std::initializer_list<T>& list) : Queue(list.size()) {
+	explicit Queue(int capacity)
+		: _array(std::unique_ptr<T[]>(new T[0]{}))
+		  , _capacity(capacity)
+		  , _front(0)
+		  , _size(0) {}
+
+	Queue(const std::initializer_list<T>& list)
+		: Queue(list.size()) {
 		for (T item : list) {
 			pushBack(item);
 		}
 	}
 
-	Queue(const Queue<T>& queue) : Queue(queue.size()) {
+	Queue(const Queue<T>& queue)
+		: Queue(queue.size()) {
 		for (size_t i = 0; i < queue._size; ++i) {
 			pushBack(queue[i]);
 		}
 	}
 
-	void pushBack(T item) {
+	PushBackResult pushBack(T item) {
 		if (_size == _capacity) {
-			return;
+			return PushBackResult::Dropped;
 		}
 		_array[(_front + _size) % _capacity] = std::move(item);
 		++_size;
+		return PushBackResult::Added;
 	}
 
 	void popFront() {
@@ -39,6 +50,23 @@ public:
 			return;
 		}
 		_front = (_front + 1) % _capacity;
+		--_size;
+	}
+
+	void remove(size_t index) {
+		if (index >= _size) {
+			throw std::out_of_range("index is out of range");
+		}
+
+		if (index == 0) {
+			popFront();
+			return;
+		}
+
+		for (size_t i = 0; i < _size - index; ++i) {
+			_array[(_front + i + index) % _capacity]
+				= std::move(_array[(_front + i + index + 1) % _capacity]);
+		}
 		--_size;
 	}
 
@@ -96,34 +124,8 @@ private:
 
 using Buffer = Queue<Packet>;
 
-/*
- * for each packet {
- *   currentTime = packet.arrivalTime
- *   for each packet in buffer {
- *     responseTime = packet.arrivalTime + packet.processDuration
- *     if responseTime > currentTime {
- *       remove that packet and add to response
- *     }
- *   }
- *
- *   push packet to buffer
- *   if buffer size didn't change {
- *     add dropped response
- *   }
- * }
- * for each packet in buffer {
- *   responseTime = packet.arrivalTime + packet.processDuration
- *   add to response
- * }
- * sort responses by arrivalTime
- */
+std::vector<Response> processPackets(const std::vector<Packet>& packets, Buffer* pBuffer);
 
-std::vector<Response> processPackets(const std::vector<Packet>& packets, Buffer *pBuffer) {
-	time::time time = 0;
-	for (const Packet& packet : packets) {
-//		packet.arrivalTime
-	}
-	return {};
 }
 
 #endif //ASSIGNMENT_3__BUFFER_H_
