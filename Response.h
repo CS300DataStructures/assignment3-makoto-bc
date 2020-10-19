@@ -3,6 +3,7 @@
 
 #include <variant>
 #include <ostream>
+#include <tuple>
 #include "time.h"
 
 namespace network {
@@ -29,6 +30,14 @@ public:
 
 	time processTime() const {
 		return std::get<time>(_processTime);
+	}
+
+	void output(std::ostream& os) const {
+		if (dropped()) {
+			os << "-1";
+		} else {
+			os << processTime();
+		}
 	}
 
 	bool operator==(const Response& rhs) const {

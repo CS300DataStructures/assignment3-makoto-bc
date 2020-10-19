@@ -9,6 +9,7 @@ namespace network {
 std::vector<Packet> readPackets() {
 	size_t lineCount;
 	std::cin >> lineCount;
+	std::cin.ignore();
 
 	std::vector<Packet> result;
 	std::string line;
@@ -27,7 +28,11 @@ std::vector<Packet> readPackets() {
 }
 
 void printResponses(const std::vector<Response>& responses) {
-
+	for (const Response& response : responses) {
+		response.output(std::cout);
+		std::cout << '\n';
+	}
+	std::cout << std::flush;
 }
 
 }
@@ -47,8 +52,8 @@ int main() {
     //process the packets
     vector<Response> responses = processPackets(requests, &buffer);
 
-//    //print responses
-//    printResponses(responses);
+    //print responses
+    printResponses(responses);
 
 	return 0;
 }
