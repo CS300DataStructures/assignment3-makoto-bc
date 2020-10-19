@@ -173,6 +173,15 @@ TEST(Buffer, processPackets) {
 		},
 		{ // 5
 			{
+				{0, 1, 1},
+			},
+			1,
+			{
+				Response::newCompletedResponse(1),
+			},
+		},
+		{ // 6
+			{
 				{0, 0, 0},
 				{1, 1, 0},
 			},
@@ -182,7 +191,7 @@ TEST(Buffer, processPackets) {
 				Response::newDropped(),
 			},
 		},
-		{ // 6
+		{ // 7
 			{
 				{0, 0, 0},
 				{1, 1, 0},
@@ -193,7 +202,7 @@ TEST(Buffer, processPackets) {
 				Response::newCompletedResponse(1),
 			},
 		},
-		{ // 7
+		{ // 8
 			{
 				{0, 0, 1},
 				{1, 1, 1},
@@ -204,7 +213,7 @@ TEST(Buffer, processPackets) {
 				Response::newCompletedResponse(1),
 			},
 		},
-		{ // 8
+		{ // 9
 			{
 				{0, 0, 2},
 				{1, 1, 0},
@@ -215,7 +224,7 @@ TEST(Buffer, processPackets) {
 				Response::newDropped(),
 			},
 		},
-		{ // 9
+		{ // 10
 			{
 				{0, 0, 2},
 				{1, 1, 0},
@@ -226,7 +235,7 @@ TEST(Buffer, processPackets) {
 				Response::newCompletedResponse(2),
 			},
 		},
-		{ // 10
+		{ // 11
 			{
 				{0, 0, 2},
 				{1, 1, 0},
@@ -239,7 +248,7 @@ TEST(Buffer, processPackets) {
 				Response::newCompletedResponse(2),
 			},
 		},
-		{ // 11
+		{ // 12
 			{
 				{0, 0, 2},
 				{1, 1, 0},
@@ -252,7 +261,7 @@ TEST(Buffer, processPackets) {
 				Response::newDropped(),
 			},
 		},
-		{ // 12
+		{ // 13
 			{
 				{0, 0, 2},
 				{1, 1, 0},
@@ -265,7 +274,7 @@ TEST(Buffer, processPackets) {
 				Response::newDropped(),
 			},
 		},
-		{ // 13
+		{ // 14
 			{
 				{0, 0, 4},
 				{1, 1, 1},
@@ -278,7 +287,7 @@ TEST(Buffer, processPackets) {
 				Response::newCompletedResponse(5),
 			},
 		},
-		{ // 14
+		{ // 15
 			{
 				{0, 0, 1},
 				{1, 1, 2},

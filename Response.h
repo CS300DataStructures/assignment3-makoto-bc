@@ -8,18 +8,30 @@
 
 namespace network {
 
+/**
+ * Packet processing result.
+ */
 class Response {
 public:
+	/**
+	 * Signifies a dropped packet.
+	 */
 	struct Dropped {
 		bool operator==(const Dropped& rhs) const {
 			return true;
 		}
 	};
 
+	/**
+	 * Dropped packet response.
+	 */
 	static Response newDropped() {
 		return Response(Dropped{});
 	}
 
+	/**
+	 * Response if packet was processed.
+	 */
 	static Response newCompletedResponse(time processTime) {
 		return Response(processTime);
 	}
@@ -28,10 +40,17 @@ public:
 		return std::holds_alternative<Dropped>(_processTime);
 	}
 
+	/**
+	 * Check dropped() first.
+	 * @return Time when processing started
+	 */
 	time processTime() const {
 		return std::get<time>(_processTime);
 	}
 
+	/**
+	 * UI output.
+	 */
 	void output(std::ostream& os) const {
 		if (dropped()) {
 			os << "-1";

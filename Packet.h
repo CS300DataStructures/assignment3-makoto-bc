@@ -6,6 +6,9 @@
 
 namespace network {
 
+/**
+ * Packets to be processed.
+ */
 class Packet {
 public:
 	/**

@@ -8,26 +8,42 @@
 
 namespace network {
 
+/**
+ * FIFO container based on a fixed stack.
+ * @tparam T Item type
+ */
 template<class T>
 class Queue {
 public:
+	/**
+	 * Used for pushBack().
+	 */
 	enum class PushBackResult {
 		Added,
 		Dropped,
 	};
 
+	/**
+	 * Initializes queue with given capacity.
+	 */
 	explicit Queue(int capacity)
 		: _array(std::make_unique<T[]>(static_cast<size_t>(capacity)))
 		  , _capacity(static_cast<size_t>(capacity))
 		  , _front(0)
 		  , _size(0) {}
 
+	/**
+	 * Initializes queue with given capacity.
+	 */
 	explicit Queue(size_t capacity)
 		: _array(std::make_unique<T[]>(capacity))
 		  , _capacity(capacity)
 		  , _front(0)
 		  , _size(0) {}
 
+	/**
+	 * Sets capacity to list size and copies items in list to queue.
+	 */
 	Queue(const std::initializer_list<T>& list) // NOLINT(cppcoreguidelines-pro-type-member-init)
 		: Queue(list.size()) {
 		for (T item : list) {
@@ -42,6 +58,11 @@ public:
 		}
 	}
 
+	/**
+	 * Pushes item to back of queue if there is space.
+	 * @return PushBackResult::Added if item was added to queue. PushBackResult::Dropped if item
+	 * was not added to queue.
+	 */
 	PushBackResult pushBack(T item) {
 		if (_size == _capacity) {
 			return PushBackResult::Dropped;
@@ -51,14 +72,20 @@ public:
 		return PushBackResult::Added;
 	}
 
+	/**
+	 * Removes first item in queue if queue is not empty.
+	 */
 	void popFront() {
-		if (_size == 0) {
-			return;
+		if (_size > 0) {
+			_front = (_front + 1) % _capacity;
+			--_size;
 		}
-		_front = (_front + 1) % _capacity;
-		--_size;
 	}
 
+	/**
+	 * Removes item at index if it exists.
+	 * @throws std::out_of_range index is out of range
+	 */
 	void remove(size_t index) {
 		if (index >= _size) {
 			throw std::out_of_range("index is out of range");
@@ -128,8 +155,17 @@ private:
 	size_t _size;
 };
 
+/**
+ * Stores Packets in a Queue with a fixed capacity.
+ */
 using Buffer = Queue<Packet>;
 
+/**
+ * Determines response times of packets.
+ * @param packets Input packets
+ * @param pBuffer Buffer for packets
+ * @return Response times
+ */
 std::vector<Response> processPackets(const std::vector<Packet>& packets, Buffer* pBuffer);
 
 }
