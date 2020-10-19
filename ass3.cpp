@@ -28,6 +28,10 @@ std::vector<Packet> readPackets() {
 }
 
 void printResponses(const std::vector<Response>& responses) {
+	if (responses.empty()) {
+		std::cout << "-2\n";
+	}
+
 	for (const Response& response : responses) {
 		response.output(std::cout);
 		std::cout << '\n';
