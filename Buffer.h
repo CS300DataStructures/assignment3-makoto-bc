@@ -161,7 +161,8 @@ private:
 using Buffer = Queue<Packet>;
 
 /**
- * Determines response times of packets.
+ * Determines response times of packets. Each packet is processed sequentially, as if we are using
+ * a horribly designed server.
  * @param packets Input packets
  * @param pBuffer Buffer for packets
  * @return Response times

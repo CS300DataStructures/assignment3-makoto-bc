@@ -9,7 +9,7 @@
 namespace network {
 
 /**
- * Packet processing result.
+ * Packet processing result. Stores dropped status and time when response started processing.
  */
 class Response {
 public:
