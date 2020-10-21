@@ -17,7 +17,7 @@ public:
 	 * Signifies a dropped packet.
 	 */
 	struct Dropped {
-		bool operator==(const Dropped& rhs) const {
+		bool operator==(const Dropped&) const {
 			return true;
 		}
 	};
