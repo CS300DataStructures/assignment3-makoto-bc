@@ -58,6 +58,13 @@ public:
 		}
 	}
 
+	Queue(Queue&& queue) noexcept {
+		_array = std::move(queue._array);
+		_capacity = queue._capacity;
+		_front = queue._front;
+		_size = queue._size;
+	}
+
 	/**
 	 * Pushes item to back of queue if there is space.
 	 * @return PushBackResult::Added if item was added to queue. PushBackResult::Dropped if item
@@ -107,7 +114,11 @@ public:
 		return _size;
 	}
 
-	T& operator[](size_t index) const {
+	T& operator[](size_t index) {
+		return const_cast<T&>(const_cast<const Queue&>(*this).operator[](index));
+	}
+
+	const T& operator[](size_t index) const {
 		if (index >= _size) {
 			throw std::out_of_range("index is out of range");
 		}
@@ -138,14 +149,6 @@ public:
 		}
 		os << '}';
 		return os;
-	}
-
-	Queue& operator=(Queue&& queue) noexcept {
-		_array = std::move(queue._array);
-		_capacity = queue._capacity;
-		_front = queue._front;
-		_size = queue._size;
-		return *this;
 	}
 
 private:
