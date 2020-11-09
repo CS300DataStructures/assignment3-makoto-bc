@@ -26,18 +26,18 @@ public:
 	 * Dropped packet response.
 	 */
 	static Response newDropped() {
-		return Response(Dropped{});
+		return Response(0, true);
 	}
 
 	/**
 	 * Response if packet was processed.
 	 */
 	static Response newCompletedResponse(time processTime) {
-		return Response(processTime);
+		return Response(processTime, false);
 	}
 
 	bool dropped() const {
-		return std::holds_alternative<Dropped>(_processTime);
+		return _dropped;
 	}
 
 	/**
@@ -45,7 +45,7 @@ public:
 	 * @return Time when processing started
 	 */
 	time processTime() const {
-		return std::get<time>(_processTime);
+		return _processTime;
 	}
 
 	/**
@@ -73,10 +73,12 @@ public:
 	}
 
 private:
-	explicit Response(std::variant<time, Dropped> processTime)
-		: _processTime(processTime) {}
+	explicit Response(time processTime, bool dropped)
+		: _processTime(processTime)
+		, _dropped(dropped) {}
 
-	std::variant<time, Dropped> _processTime;
+	time _processTime;
+	bool _dropped;
 };
 
 }
