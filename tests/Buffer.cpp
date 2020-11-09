@@ -13,27 +13,27 @@ TEST(Buffer, pushBack) {
 	{
 		Queue<int> queue(1);
 		queue.pushBack(0);
-		EXPECT_EQ(queue, Queue({0}));
+		EXPECT_EQ(queue, Queue<int>({0}));
 		queue.pushBack(1);
-		EXPECT_EQ(queue, Queue({0}));
+		EXPECT_EQ(queue, Queue<int>({0}));
 	}
 	{
 		Queue<int> queue(2);
 		queue.pushBack(0);
-		EXPECT_EQ(queue, Queue({0}));
+		EXPECT_EQ(queue, Queue<int>({0}));
 		queue.pushBack(1);
-		EXPECT_EQ(queue, Queue({0, 1}));
+		EXPECT_EQ(queue, Queue<int>({0, 1}));
 		queue.pushBack(2);
-		EXPECT_EQ(queue, Queue({0, 1}));
+		EXPECT_EQ(queue, Queue<int>({0, 1}));
 		queue.popFront();
-		EXPECT_EQ(queue, Queue({1}));
+		EXPECT_EQ(queue, Queue<int>({1}));
 		queue.pushBack(2);
-		EXPECT_EQ(queue, Queue({1, 2}));
+		EXPECT_EQ(queue, Queue<int>({1, 2}));
 		queue.popFront();
 		queue.popFront();
 		queue.pushBack(3);
 		queue.pushBack(4);
-		EXPECT_EQ(queue, Queue({3, 4}));
+		EXPECT_EQ(queue, Queue<int>({3, 4}));
 	}
 }
 
